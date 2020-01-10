@@ -18,7 +18,7 @@ class CRideModel(models.Model):
         help_text='DateTime on which the object was created'
     )
     modified = models.DateTimeField('modified at',
-        auto_now=False,
+        auto_now=True,
         help_text='Datetime on which the object was las modified'
     )
 
