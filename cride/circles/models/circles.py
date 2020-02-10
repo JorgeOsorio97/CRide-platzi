@@ -6,6 +6,7 @@ from django.db import models
 # Utilities
 from cride.utils.models import CRideModel
 
+
 class Circle(CRideModel):
     """Circle model.
 
@@ -20,7 +21,13 @@ class Circle(CRideModel):
     about = models.CharField("Circle description", max_length=255)
     picture = models.ImageField(upload_to='circles/pictures', blank=True, null=True)
 
-    #stats
+    members = models.ManyToManyField(
+        "users.User",
+        through='circles.Membership',
+        through_fields=('circle','user')
+    )
+
+    # Stats
     rides_offered = models.PositiveIntegerField(default=0)
     rides_taken = models.PositiveIntegerField(default=0)
 
@@ -41,7 +48,7 @@ class Circle(CRideModel):
         help_text="Limited circles can grow up to a fixed number of members."
 
     )
-    members_limit=models.PositiveIntegerField(
+    members_limit = models.PositiveIntegerField(
         default=0,
         help_text="If circle is limited, this will be the limit on the number of members"
     )
@@ -49,7 +56,7 @@ class Circle(CRideModel):
     def __str__(self):
         """Return circle name"""
         return self.name
-    
+
     class Meta(CRideModel.Meta):
         """Meta class."""
 
