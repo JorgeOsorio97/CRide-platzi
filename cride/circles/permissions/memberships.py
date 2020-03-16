@@ -24,3 +24,15 @@ class IsActiveCircleMember(BasePermission):
         except Membership.DoesNotExist:
             return False
         return True
+
+class IsSelfMember(BasePermission):
+    """Allow access only to member owners."""
+
+    def has_permission(self, request, view):
+        """Let object permission grant access"""
+        obj = view.get_object()
+        return self.has_permission(request, view, obj)
+    
+    def has_object_permission(self, request, view, obj):
+        """Allow access only if member is owned by requestting user."""
+        return request.user == obj.user
